@@ -117,7 +117,7 @@ class AnimeAPI {
             params["search"] = searchTerm!
         }
         let queue = dispatch_queue_create("com.popcorn-time.response.queue", DISPATCH_QUEUE_CONCURRENT)
-        Alamofire.request(.GET, animeAPIEndpoint + "/list.php", parameters: params).validate().responseJSON(queue: queue, options: .AllowFragments, completionHandler: { response in
+        Alamofire.request(.GET, animeAPIEndpoint + "list.php", parameters: params).validate().responseJSON(queue: queue, options: .AllowFragments, completionHandler: { response in
             guard response.result.isSuccess else {
                 asyncMain {
                     completion(items: [])
