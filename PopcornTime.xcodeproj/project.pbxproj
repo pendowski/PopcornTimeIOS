@@ -54,7 +54,7 @@
 		7E2D47411B65520D00611019 /* TraktTVAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2D47401B65520D00611019 /* TraktTVAPI.swift */; };
 		7E3CFB7B1B62B20B002F9E8C /* PCTTorrent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3CFB7A1B62B20B002F9E8C /* PCTTorrent.swift */; };
 		85F38AE05A2DF856A465302E /* Pods_Popcorn_Time.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC067E4CCF06825BB4ADA281 /* Pods_Popcorn_Time.framework */; };
-		AAB1AF9D1DB561630022B14C /* APIProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1AF9C1DB561630022B14C /* APIProtocols.swift */; };
+		AAB1AF9D1DB561630022B14C /* APIBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1AF9C1DB561630022B14C /* APIBase.swift */; };
 		AAB1AFA01DB563220022B14C /* ClosureShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1AF9F1DB563220022B14C /* ClosureShortcuts.swift */; };
 /* End PBXBuildFile section */
 
@@ -125,7 +125,7 @@
 		7E3CFB7A1B62B20B002F9E8C /* PCTTorrent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCTTorrent.swift; path = API/PCTTorrent.swift; sourceTree = "<group>"; };
 		7EA9DF041B61A19A00BAC6AF /* Popcorn Time.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Popcorn Time.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EA9DF081B61A19A00BAC6AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AAB1AF9C1DB561630022B14C /* APIProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIProtocols.swift; path = API/Providers/APIProtocols.swift; sourceTree = "<group>"; };
+		AAB1AF9C1DB561630022B14C /* APIBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIBase.swift; path = API/Providers/APIBase.swift; sourceTree = "<group>"; };
 		AAB1AF9F1DB563220022B14C /* ClosureShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureShortcuts.swift; sourceTree = "<group>"; };
 		DC067E4CCF06825BB4ADA281 /* Pods_Popcorn_Time.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Popcorn_Time.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -214,7 +214,7 @@
 				7E2D473B1B653EDE00611019 /* AnimeAPI.swift */,
 				7E2D47401B65520D00611019 /* TraktTVAPI.swift */,
 				4D33E8761CF3957500E65498 /* OpenSubtitles.swift */,
-				AAB1AF9C1DB561630022B14C /* APIProtocols.swift */,
+				AAB1AF9C1DB561630022B14C /* APIBase.swift */,
 			);
 			name = Providers;
 			sourceTree = "<group>";
@@ -528,7 +528,7 @@
 				4D74C21B1D23CEC500FB81CA /* StreamToDevicesTableViewController.swift in Sources */,
 				7E2D473D1B653EDE00611019 /* TVAPI.swift in Sources */,
 				4D0005661D3C3CAD0075706C /* AirPlayManager.swift in Sources */,
-				AAB1AF9D1DB561630022B14C /* APIProtocols.swift in Sources */,
+				AAB1AF9D1DB561630022B14C /* APIBase.swift in Sources */,
 				4D33E8771CF3957500E65498 /* OpenSubtitles.swift in Sources */,
 				4DC5419A1CFB5491001A531C /* TablePickerView.swift in Sources */,
 				7E2AD00D1B61D28A001B24BE /* AppDelegate.swift in Sources */,

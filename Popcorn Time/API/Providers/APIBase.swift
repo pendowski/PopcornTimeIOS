@@ -16,3 +16,21 @@ protocol Titlable {
 protocol StringValueRepresentable {
     var stringValue: String { get }
 }
+
+enum Result<T> {
+    case success(T)
+    case failure(ErrorType)
+    
+    init(value: T) {
+        self = .success(value)
+    }
+    
+    init(error: ErrorType) {
+        self = .failure(error)
+    }
+    
+}
+
+enum GenericErrors: ErrorType {
+    case UnknownError
+}
