@@ -62,7 +62,7 @@ class AnimeAPI {
         
         var stringValue: String {
             if self == .All { return "" }
-            return self.rawValue
+            return self.rawValue.stringByReplacingOccurrencesOfString(" ", withString: "-")
         }
     }
     /**
@@ -112,7 +112,7 @@ class AnimeAPI {
         genre: genres = .All,
         searchTerm: String? = nil,
         completion: (items: [PCTShow]) -> Void) {
-        var params: [String: AnyObject] = ["sort": filterBy.rawValue, "limit": 30, "type": genre.rawValue.stringByReplacingOccurrencesOfString(" ", withString: "-"), "order": "asc", "page": page - 1]
+        var params: [String: AnyObject] = ["sort": filterBy.stringValue, "limit": 30, "type": genre.stringValue, "order": "asc", "page": page - 1]
         if searchTerm != nil {
             params["search"] = searchTerm!
         }
