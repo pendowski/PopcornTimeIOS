@@ -11,7 +11,7 @@ target "Popcorn Time" do
     pod 'AlamofireNetworkActivityIndicator'
     pod 'KMPlaceholderTextView'
     pod 'SwiftyJSON'
-    pod 'FloatRatingView', git: 'https://github.com/strekfus/FloatRatingView.git'
+    pod 'FloatRatingView', git: 'https://github.com/strekfus/FloatRatingView.git', :tag => '1.0.3'
     pod 'AlamofireXMLRPC', git: 'https://github.com/PTCE-TEAM/AlamofireXMLRPC.git'
     pod 'Reachability'
     pod 'XCDYouTubeKit'
