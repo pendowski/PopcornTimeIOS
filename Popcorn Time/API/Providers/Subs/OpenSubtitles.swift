@@ -54,9 +54,9 @@ class OpenSubtitles {
                 }
             }
             subtitles.sortInPlace({ $0.language < $1.language })
-            dispatch_async(dispatch_get_main_queue(), { 
+            asyncMain {
                 completion(subtitles: subtitles)
-            })
+            }
         })
     }
     /**

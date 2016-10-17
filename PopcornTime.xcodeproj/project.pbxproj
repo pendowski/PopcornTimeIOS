@@ -55,6 +55,7 @@
 		7E3CFB7B1B62B20B002F9E8C /* PCTTorrent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3CFB7A1B62B20B002F9E8C /* PCTTorrent.swift */; };
 		85F38AE05A2DF856A465302E /* Pods_Popcorn_Time.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC067E4CCF06825BB4ADA281 /* Pods_Popcorn_Time.framework */; };
 		AAB1AF9D1DB561630022B14C /* APIProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1AF9C1DB561630022B14C /* APIProtocols.swift */; };
+		AAB1AFA01DB563220022B14C /* ClosureShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB1AF9F1DB563220022B14C /* ClosureShortcuts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -125,6 +126,7 @@
 		7EA9DF041B61A19A00BAC6AF /* Popcorn Time.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Popcorn Time.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EA9DF081B61A19A00BAC6AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAB1AF9C1DB561630022B14C /* APIProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIProtocols.swift; path = API/Providers/APIProtocols.swift; sourceTree = "<group>"; };
+		AAB1AF9F1DB563220022B14C /* ClosureShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureShortcuts.swift; sourceTree = "<group>"; };
 		DC067E4CCF06825BB4ADA281 /* Pods_Popcorn_Time.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Popcorn_Time.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -262,6 +264,7 @@
 				7EA9DF2E1B61A21800BAC6AF /* Startup */,
 				7E3CFB751B62A662002F9E8C /* API */,
 				7EA9DF2B1B61A1E500BAC6AF /* UI */,
+				AAB1AF9E1DB5630E0022B14C /* Helpers */,
 				7EA9DF2F1B61A22A00BAC6AF /* Resources */,
 				7EA9DF071B61A19A00BAC6AF /* Supporting Files */,
 			);
@@ -342,6 +345,14 @@
 				4DC541821CFB544D001A531C /* EpisodeDetailViewController.swift */,
 			);
 			name = "Detail View Controllers";
+			sourceTree = "<group>";
+		};
+		AAB1AF9E1DB5630E0022B14C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				AAB1AF9F1DB563220022B14C /* ClosureShortcuts.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 		E10396330A8E2F68E982223B /* Frameworks */ = {
@@ -490,6 +501,7 @@
 				4DC541781CFB540D001A531C /* FavouritesHeaderCollectionReusableView.swift in Sources */,
 				4DFB75801D273075004DC1FD /* AirPlayTableViewCell.swift in Sources */,
 				7E2D47411B65520D00611019 /* TraktTVAPI.swift in Sources */,
+				AAB1AFA01DB563220022B14C /* ClosureShortcuts.swift in Sources */,
 				4DC541801CFB5441001A531C /* TVShowDetailTableViewCell.swift in Sources */,
 				4DC541931CFB5467001A531C /* SettingsTableViewController.swift in Sources */,
 				4DC541941CFB5467001A531C /* SubtitlesTableViewController.swift in Sources */,

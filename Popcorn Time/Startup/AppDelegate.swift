@@ -51,11 +51,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func reachabilityChanged(notification: NSNotification) {
         if !reachability!.isReachableViaWiFi() && !reachability!.isReachableViaWWAN() {
-            dispatch_async(dispatch_get_main_queue(), {
+            asyncMain {
                 let errorAlert = UIAlertController(title: "Oops..", message: "You are not connected to the internet anymore. Popcorn Time will automatically reconnect once it detects a valid internet connection.", preferredStyle: UIAlertControllerStyle.Alert)
                 errorAlert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler:nil))
                 self.window?.rootViewController?.presentViewController(errorAlert, animated: true, completion: nil)
-            })
+            }
         }
     }
 	

@@ -205,10 +205,10 @@ class SettingsTableViewController: UITableViewController, TablePickerViewDelegat
                 do {
                     let credential = try OAuthCredential(URLString: "https://api-v2launch.trakt.tv/oauth/token", code: query["code"]!, redirectURI: "PopcornTime://trakt", clientID: TraktTVAPI.sharedInstance.clientId, clientSecret: TraktTVAPI.sharedInstance.clientSecret, useBasicAuthentication: false)
                     OAuthCredential.storeCredential(credential, identifier: "trakt")
-                    dispatch_async(dispatch_get_main_queue(), {
+                    asyncMain {
                         self.ud.setBool(true, forKey: "AuthorizedTrakt")
                         self.updateSignedInStatus(self.traktSignInButton, isSignedIn: true)
-                    })
+                    }
                 } catch {}
             }
             return

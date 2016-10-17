@@ -135,9 +135,9 @@ class AnimeAPI {
                     pctAnimes.append(show)
                 }
             }
-            dispatch_async(dispatch_get_main_queue(), {
+            asyncMain {
                 completion(items: pctAnimes)
-            })
+            }
         })
     }
     /**

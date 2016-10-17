@@ -117,9 +117,9 @@ class TraktTVAPI {
             Alamofire.request(.POST, "https://api.trakt.tv/scrobble/\(status.rawValue)", parameters: parameters, encoding: .JSON, headers: ["trakt-api-key": self.clientId, "trakt-api-version": "2", "Authorization": "Bearer \(credential.accessToken)"]).validate().responseJSON(completionHandler: { response in
                 if let error = response.result.error {
                     if error.code == -403 {
-                        dispatch_async(dispatch_get_main_queue(), {
+                        asyncMain {
                             NSNotificationCenter.defaultCenter().postNotificationName(traktAuthenticationErrorNotification, object: nil)
-                        })
+                        }
                     }
                     print("Error is: \(error)")
                 }
@@ -216,15 +216,15 @@ class TraktTVAPI {
                             ids += tvdbIds
                         }
                     }
-                    dispatch_async(dispatch_get_main_queue(), {
+                    asyncMain {
                        completion(ids: ids)
-                    })
+                    }
                     return
                 }
                 if response.result.error!.code == -403 {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    asyncMain {
                         NSNotificationCenter.defaultCenter().postNotificationName(traktAuthenticationErrorNotification, object: nil)
-                    })
+                    }
                 }
             })
         }
@@ -265,9 +265,9 @@ class TraktTVAPI {
                     return
                 }
                 if response.result.error!.code == -403 {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    asyncMain {
                         NSNotificationCenter.defaultCenter().postNotificationName(traktAuthenticationErrorNotification, object: nil)
-                    })
+                    }
                 }
             }
         }
@@ -299,9 +299,9 @@ class TraktTVAPI {
             Alamofire.request(.POST, "https://api.trakt.tv/sync/history/remove", parameters: parameters, encoding: .JSON, headers: ["trakt-api-key": self.clientId, "trakt-api-version": "2", "Authorization": "Bearer \(credential.accessToken)"]).validate().responseJSON(completionHandler: { response in
                 if let error = response.result.error {
                     if error.code == -403 {
-                        dispatch_async(dispatch_get_main_queue(), {
+                        asyncMain {
                             NSNotificationCenter.defaultCenter().postNotificationName(traktAuthenticationErrorNotification, object: nil)
-                        })
+                        }
                     }
                     print("Error is: \(error)")
                 }
