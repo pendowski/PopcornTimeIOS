@@ -56,8 +56,13 @@ class TVShowsCollectionViewController: ItemOverview, UIPopoverPresentationContro
         guard isLoading else {
             isLoading = true
             hasNextPage = false
-            TVAPI.sharedInstance.load(currentPage, filterBy: currentFilter, genre: currentGenre, searchTerm: searchTerm) { items in
+            TVAPI.sharedInstance.load(currentPage, filterBy: currentFilter, genre: currentGenre, searchTerm: searchTerm) { result in
                 self.isLoading = false
+                
+                guard case .success(let items) = result else {
+                    return
+                }
+                
                 if removeCurrentData {
                     self.shows.removeAll()
                 }
@@ -154,7 +159,7 @@ class TVShowsCollectionViewController: ItemOverview, UIPopoverPresentationContro
             let reuseableView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "filter", forIndexPath: indexPath) as! FilterCollectionReusableView
             reuseableView.segmentedControl?.removeAllSegments()
             for (index, filterValue) in TVAPI.filters.arrayValue.enumerate() {
-                reuseableView.segmentedControl?.insertSegmentWithTitle(filterValue.stringValue(), atIndex: index, animated: false)
+                reuseableView.segmentedControl?.insertSegmentWithTitle(filterValue.title, atIndex: index, animated: false)
             }
             reuseableView.hidden = true
             reuseableView.segmentedControl?.addTarget(self, action: #selector(segmentedControlDidChangeSegment(_:)), forControlEvents: .ValueChanged)

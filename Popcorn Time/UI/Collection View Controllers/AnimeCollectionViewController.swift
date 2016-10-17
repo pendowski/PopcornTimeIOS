@@ -56,8 +56,13 @@ class AnimeCollectionViewController: ItemOverview, UIPopoverPresentationControll
         guard isLoading else {
             isLoading = true
             hasNextPage = false
-            AnimeAPI.sharedInstance.load(currentPage, filterBy: .Popularity, searchTerm: searchTerm) { items in
+            AnimeAPI.sharedInstance.load(currentPage, filterBy: .Popularity, searchTerm: searchTerm) { result in
                 self.isLoading = false
+                
+                guard case .success(let items) = result else {
+                    return
+                }
+                
                 if removeCurrentData {
                     self.anime.removeAll()
                 }

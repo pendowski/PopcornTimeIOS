@@ -111,7 +111,7 @@ class AnimeAPI {
         filterBy: filters,
         genre: genres = .All,
         searchTerm: String? = nil,
-        completion: (items: [PCTShow]) -> Void) {
+        completion: (result: Result<[PCTShow]>) -> Void) {
         var params: [String: AnyObject] = ["sort": filterBy.stringValue, "limit": 30, "type": genre.stringValue, "order": "asc", "page": page - 1]
         if searchTerm != nil {
             params["search"] = searchTerm!
@@ -119,12 +119,15 @@ class AnimeAPI {
         let queue = dispatch_queue_create("com.popcorn-time.response.queue", DISPATCH_QUEUE_CONCURRENT)
         Alamofire.request(.GET, animeAPIEndpoint + "list.php", parameters: params).validate().responseJSON(queue: queue, options: .AllowFragments, completionHandler: { response in
             guard response.result.isSuccess else {
+                
+                let error: ErrorType = response.result.error ?? GenericErrors.UnknownError
+                NSNotificationCenter.defaultCenter().postNotificationName(errorNotification, object: response.result.error)
+                print("Error is: \(error)")
+                
                 asyncMain {
-                    completion(items: [])
+                    completion(result: Result(error: error))
                 }
                 
-                NSNotificationCenter.defaultCenter().postNotificationName(errorNotification, object: response.result.error!)
-                print("Error is: \(response.result.error!)")
                 return
             }
             let animes = JSON(response.result.value!)
@@ -140,7 +143,7 @@ class AnimeAPI {
                 }
             }
             asyncMain {
-                completion(items: pctAnimes)
+                completion(result: Result(value: pctAnimes))
             }
         })
     }

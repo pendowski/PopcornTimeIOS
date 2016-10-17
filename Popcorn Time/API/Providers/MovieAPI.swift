@@ -99,7 +99,7 @@ class MovieAPI {
         filterBy: filters,
         genre: genres = .All,
         searchTerm: String? = nil,
-        completion: (items: [PCTMovie]) -> Void) {
+        completion: (result: Result<[PCTMovie]>) -> Void) {
         var params: [String: AnyObject] = ["sort_by": filterBy.stringValue, "limit": limit, "page": page, "genre": genre.stringValue, "with_rt_ratings": "true", "lang": "en"]
         if let searchTerm = searchTerm where !searchTerm.isEmpty {
             params["query_term"] = searchTerm
@@ -109,8 +109,16 @@ class MovieAPI {
         }
         Alamofire.request(.GET, moviesAPIEndpoint + "list_movies_pct.json", parameters: params).validate().responseJSON { response in
             guard response.result.isSuccess else {
-                NSNotificationCenter.defaultCenter().postNotificationName(errorNotification, object: response.result.error!)
-                print("Error is: \(response.result.error!)")
+                
+                let error: ErrorType = response.result.error ?? GenericErrors.UnknownError
+                
+                NSNotificationCenter.defaultCenter().postNotificationName(errorNotification, object: response.result.error)
+                print("Error is: \(error)")
+                
+                asyncMain {
+                    completion(result: Result(error: error))
+                }
+                
                 return
             }
             let movies =  JSON(response.result.value!)["data"]["movies"]
@@ -132,7 +140,7 @@ class MovieAPI {
                 let pctMovie = PCTMovie(title: title, year: year, coverImageAsString: coverImage, imdbId: id, rating: rating, torrents: torrents, genres: genres, summary: description, runtime: runtime, trailorURLString: trailorString)
                 pctMovies.append(pctMovie)
             }
-            completion(items: pctMovies)
+            completion(result: Result(value: pctMovies))
         }
     }
 }

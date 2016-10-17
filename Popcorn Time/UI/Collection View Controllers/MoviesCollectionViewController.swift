@@ -63,8 +63,13 @@ class MoviesCollectionViewController: ItemOverview, UIPopoverPresentationControl
         guard isLoading else {
             isLoading = true
             hasNextPage = false
-            MovieAPI.sharedInstance.load(currentPage, filterBy: currentFilter, genre: currentGenre, searchTerm: searchTerm) { items in
+            MovieAPI.sharedInstance.load(currentPage, filterBy: currentFilter, genre: currentGenre, searchTerm: searchTerm) { result in
                 self.isLoading = false
+                
+                guard case .success(let items) = result else {
+                    return
+                }
+                
                 if removeCurrentData {
                     self.movies.removeAll()
                 }

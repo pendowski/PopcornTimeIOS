@@ -15,7 +15,7 @@ class TVAPI {
     /**
      Possible genres used in API call.
      */
-    enum genres: String {
+    enum genres: String, StringValueRepresentable {
         case All = "All"
         case Action = "Action"
         case Adventure = "Adventure"
@@ -45,11 +45,15 @@ class TVAPI {
         case Western = "Western"
         
         static let arrayValue = [All, Action, Adventure, Animation, Children, Comedy, Crime, Documentary, Drama, Family, Fantasy, GameShow, HomeAndGarden, Horror, MiniSeries, Mystery, News, Reality, Romance, SciFi, Soap, SpecialInterest, Sport, Suspense, TalkShow, Thriller, Western]
+        
+        var stringValue: String {
+            return self.rawValue.stringByReplacingOccurrencesOfString(" ", withString: "-")
+        }
     }
     /**
      Possible filters used in API call.
      */
-    enum filters: String {
+    enum filters: String, Titlable, StringValueRepresentable {
         case Popularity = "popularity"
         case Year = "year"
         case Date = "updated"
@@ -59,7 +63,11 @@ class TVAPI {
         
         static let arrayValue = [Trending, Popularity, Rating, Date, Year, Alphabet]
         
-        func stringValue() -> String {
+        var stringValue: String {
+            return self.rawValue
+        }
+        
+        var title: String {
             switch self {
             case .Popularity:
                 return "Popular"
@@ -91,15 +99,23 @@ class TVAPI {
         filterBy: filters,
         genre: genres = .All,
         searchTerm: String? = nil,
-        completion: (items: [PCTShow]) -> Void) {
-        var params = ["sort": filterBy.rawValue, "genre": genre.rawValue.stringByReplacingOccurrencesOfString(" ", withString: "-")]
+        completion: (result: Result<[PCTShow]>) -> Void) {
+        var params = ["sort": filterBy.rawValue, "genre": genre.stringValue]
         if searchTerm != nil {
             params["keywords"] = searchTerm!
         }
         Alamofire.request(.GET, TVShowsAPIEndpoint + "shows/\(page)", parameters: params).validate().responseJSON { response in
             guard response.result.isSuccess else {
-                NSNotificationCenter.defaultCenter().postNotificationName(errorNotification, object: response.result.error!)
-                print("Error is: \(response.result.error!)")
+                
+                let error: ErrorType = response.result.error ?? GenericErrors.UnknownError
+                
+                NSNotificationCenter.defaultCenter().postNotificationName(errorNotification, object: response.result.error)
+                print("Error is: \(error)")
+                
+                asyncMain {
+                    completion(result: Result(error: error))
+                }
+                
                 return
             }
             let shows =  JSON(response.result.value!)
@@ -113,7 +129,7 @@ class TVAPI {
                 let pctItem = PCTShow(imdbId: id, title: title, year: year ?? "", coverImageAsString: coverImage, rating: rating)
                 pctItems.append(pctItem)
             }
-            completion(items: pctItems)
+            completion(result: Result(value: pctItems))
         }
     }
     
