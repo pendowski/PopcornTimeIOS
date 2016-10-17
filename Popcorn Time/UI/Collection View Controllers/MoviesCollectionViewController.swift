@@ -163,7 +163,7 @@ class MoviesCollectionViewController: ItemOverview, UIPopoverPresentationControl
             let reuseableView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "filter", forIndexPath: indexPath) as! FilterCollectionReusableView
             reuseableView.segmentedControl?.removeAllSegments()
             for (index, filterValue) in MovieAPI.filters.arrayValue.enumerate() {
-                reuseableView.segmentedControl?.insertSegmentWithTitle(filterValue.stringValue(), atIndex: index, animated: false)
+                reuseableView.segmentedControl?.insertSegmentWithTitle(filterValue.title, atIndex: index, animated: false)
             }
             reuseableView.hidden = true
             reuseableView.segmentedControl?.addTarget(self, action: #selector(segmentedControlDidChangeSegment(_:)), forControlEvents: .ValueChanged)

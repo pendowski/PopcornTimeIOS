@@ -15,7 +15,7 @@ class AnimeAPI {
     /**
      Possible genres used in API call.
      */
-    enum genres: String {
+    enum genres: String, StringValueRepresentable {
         case All = "All"
         case Action = "Action"
         case Adventure = "Adventure"
@@ -59,11 +59,16 @@ class AnimeAPI {
         case Vampire = "Vampire"
         
         static let arrayValue = [All, Action, Adventure, Cars, Comedy, Dementia, Demons, Drama, Ecchi, Fantasy, Game, Harem, Historical, Horror, Josei, Mystery, Kids, Magic, MartialArts, Mecha, Military, Music, Mystery, Parody, Police, Psychological, Romance, Samurai, School, SciFi, Seinen, Shoujo, ShoujoAi, Shounen, ShounenAi, SliceOfLife, Space, Sports, SuperPower, Supernatural, Thriller, Vampire]
+        
+        var stringValue: String {
+            if self == .All { return "" }
+            return self.rawValue
+        }
     }
     /**
      Possible filters used in API call.
      */
-    enum filters: String {
+    enum filters: String, Titlable, StringValueRepresentable {
         case Popularity = "popularity"
         case Year = "year"
         case Date = "updated"
@@ -72,7 +77,7 @@ class AnimeAPI {
         
         static let arrayValue = [Popularity, Rating, Date, Year, Alphabet]
         
-        func stringValue() -> String {
+        var title: String {
             switch self {
             case .Popularity:
                 return "Popular"
@@ -85,6 +90,10 @@ class AnimeAPI {
             case .Alphabet:
                 return "A-Z"
             }
+        }
+        
+        var stringValue: String {
+            return self.rawValue
         }
     }
     /**

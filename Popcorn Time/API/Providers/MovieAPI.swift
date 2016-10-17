@@ -15,7 +15,7 @@ class MovieAPI {
     /**
      Possible genres used in API call.
      */
-    enum genres: String {
+    enum genres: String, StringValueRepresentable {
         case All = "All"
         case Action = "Action"
         case Adventure = "Adventure"
@@ -43,17 +43,15 @@ class MovieAPI {
         
         static let arrayValue = [All, Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, FilmNoir, History, Horror, Music, Musical, Mystery, Romance, SciFi, Short, Sport, Thriller, War, Western]
         
-        var value: String {
-            get {
-                if self == .All { return "" }
-                return self.rawValue
-            }
+        var stringValue: String {
+            if self == .All { return "" }
+            return self.rawValue
         }
     }
     /**
      Possible filters used in API call.
      */
-    enum filters: String {
+    enum filters: String, Titlable, StringValueRepresentable {
         case Trending = "trending_score"
         case Popularity = "seeds"
         case Rating = "rating"
@@ -63,7 +61,7 @@ class MovieAPI {
         
         static let arrayValue = [Trending, Popularity, Rating, Date, Year, Alphabet]
         
-        func stringValue() -> String {
+        var title: String {
             switch self {
             case .Popularity:
                 return "Popular"
@@ -78,6 +76,10 @@ class MovieAPI {
             case .Trending:
                 return "Trending"
             }
+        }
+        
+        var stringValue: String {
+            return self.rawValue
         }
     }
     /**
@@ -98,7 +100,7 @@ class MovieAPI {
         genre: genres = .All,
         searchTerm: String? = nil,
         completion: (items: [PCTMovie]) -> Void) {
-        var params: [String: AnyObject] = ["sort_by": filterBy.rawValue, "limit": limit, "page": page, "genre": genre.value, "with_rt_ratings": "true", "lang": "en"]
+        var params: [String: AnyObject] = ["sort_by": filterBy.stringValue, "limit": limit, "page": page, "genre": genre.stringValue, "with_rt_ratings": "true", "lang": "en"]
         if let searchTerm = searchTerm where !searchTerm.isEmpty {
             params["query_term"] = searchTerm
         }
