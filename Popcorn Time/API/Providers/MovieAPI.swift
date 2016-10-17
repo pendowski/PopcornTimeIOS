@@ -42,6 +42,13 @@ class MovieAPI {
         case Western = "Western"
         
         static let arrayValue = [All, Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, FilmNoir, History, Horror, Music, Musical, Mystery, Romance, SciFi, Short, Sport, Thriller, War, Western]
+        
+        var value: String {
+            get {
+                if self == .All { return "" }
+                return self.rawValue
+            }
+        }
     }
     /**
      Possible filters used in API call.
@@ -91,7 +98,7 @@ class MovieAPI {
         genre: genres = .All,
         searchTerm: String? = nil,
         completion: (items: [PCTMovie]) -> Void) {
-        var params: [String: AnyObject] = ["sort_by": filterBy.rawValue, "limit": limit, "page": page, "genre": genre.rawValue, "with_rt_ratings": "true", "lang": "en"]
+        var params: [String: AnyObject] = ["sort_by": filterBy.rawValue, "limit": limit, "page": page, "genre": genre.value, "with_rt_ratings": "true", "lang": "en"]
         if let searchTerm = searchTerm where !searchTerm.isEmpty {
             params["query_term"] = searchTerm
         }
