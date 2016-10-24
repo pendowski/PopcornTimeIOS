@@ -5,8 +5,6 @@ import SafariServices
 
 class SettingsTableViewController: UITableViewController, TablePickerViewDelegate {
 
-    let ud = NSUserDefaults.standardUserDefaults()
-    
     var safariViewController: SFSafariViewController!
     
     @IBOutlet weak var switchStreamOnCellular: UISwitch!
@@ -25,30 +23,26 @@ class SettingsTableViewController: UITableViewController, TablePickerViewDelegat
         super.viewDidLoad()
 		addTablePicker()
         showSettings()
-        updateSignedInStatus(traktSignInButton, isSignedIn: ud.boolForKey("AuthorizedTrakt"))
-        updateSignedInStatus(openSubsSignInButton, isSignedIn: ud.boolForKey("AuthorizedOpenSubs"))
+        updateSignedInStatus(traktSignInButton, isSignedIn: Settings.AuthorizedTrakt.bool)
+        updateSignedInStatus(openSubsSignInButton, isSignedIn: Settings.AuthorizedOpenSubs.bool)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(safariLogin(_:)), name: safariLoginNotification, object: nil)
     }
     
     func showSettings() {        
         // Set StreamOnCellular
-        switchStreamOnCellular.on = ud.boolForKey("StreamOnCellular")
-        removeCacheOnPlayerExit.on = ud.boolForKey("removeCacheOnPlayerExit")
+        switchStreamOnCellular.on = Settings.StreamOnCellular.bool
+        removeCacheOnPlayerExit.on = Settings.RemoveCacheOnPlayerExit.bool
 		
 		// Set preferred subtitle language
-		if let preferredSubtitleLanguage = ud.objectForKey("PreferredSubtitleLanguage") as? String {
-            if preferredSubtitleLanguage != "None" {
-                tablePickerView?.setSelected([preferredSubtitleLanguage])
-                languageButton.setTitle(preferredSubtitleLanguage, forState: .Normal)
-            } else {
-                languageButton.setTitle("None", forState: .Normal)
-            }
+		if let preferredSubtitleLanguage = Settings.PreferredSubtitleLanguage.string where preferredSubtitleLanguage != "None" {
+            tablePickerView?.setSelected([preferredSubtitleLanguage])
+            languageButton.setTitle(preferredSubtitleLanguage, forState: .Normal)
 		} else {
             languageButton.setTitle("None", forState: .Normal)
 		}
 		
         // Set preferred quality
-        let qualityInSettings = ud.objectForKey("PreferredQuality") as? String
+        let qualityInSettings = Settings.PreferredQuality.string
         var selectedQualityIndex = 0
         segmentedQuality.removeAllSegments()
         for (index, quality) in qualities.enumerate() {
@@ -73,29 +67,26 @@ class SettingsTableViewController: UITableViewController, TablePickerViewDelegat
 		self.tabBarController?.view.addSubview(tablePickerView!)
 	}
     
-    func tablePickerView(tablePickerView: TablePickerView, didChange items: [String]) {
-        if items.count > 0 {
-            ud.setObject(items[0], forKey: "PreferredSubtitleLanguage")
-            languageButton.setTitle(items[0], forState: .Normal)
-        } else {
-            ud.setObject("None", forKey: "PreferredSubtitleLanguage")
-            languageButton.setTitle("None", forState: .Normal)
-        }
+    func tablePickerView(tablePickerView: TablePickerView, didChange items: [String])
+    {
+        let value = items.first ?? "None"
+        
+        Settings.PreferredSubtitleLanguage.setString(value)
+        languageButton.setTitle(value, forState: .Normal)
     }
 	
 	override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
 		tablePickerView?.hide()
-        ud.synchronize()
 	}
     
     @IBAction func streamOnCellular(sender: UISwitch) {
-        ud.setBool(sender.on, forKey: "StreamOnCellular")
+        Settings.StreamOnCellular.setBool(sender.on)
     }
     
     @IBAction func preferredQuality(control: UISegmentedControl) {
         let resultAsText = control.titleForSegmentAtIndex(control.selectedSegmentIndex)
-        ud.setObject(resultAsText, forKey: "PreferredQuality")
+        Settings.PreferredQuality.setString(resultAsText)
     }
 	
 	@IBAction func preferredSubtitleLanguage(sender: AnyObject) {
@@ -103,11 +94,13 @@ class SettingsTableViewController: UITableViewController, TablePickerViewDelegat
 	}
     
     @IBAction func authorizeTraktTV(sender: UIButton) {
-        if ud.boolForKey("AuthorizedTrakt") {
+        if Settings.AuthorizedTrakt.bool {
             let alert = UIAlertController(title: "Sign Out", message: "Are you sure you want to Sign Out?", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { action in
                 OAuthCredential.deleteCredentialWithIdentifier("trakt")
-                self.ud.setBool(false, forKey: "AuthorizedTrakt")
+                
+                Settings.AuthorizedTrakt.setBool(false)
+                
                 self.updateSignedInStatus(sender, isSignedIn: false)
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
@@ -119,31 +112,37 @@ class SettingsTableViewController: UITableViewController, TablePickerViewDelegat
     }
     
     @IBAction func authorizeOpenSubs(sender: UIButton) {
-        if ud.boolForKey("AuthorizedOpenSubs") {
+        if Settings.AuthorizedOpenSubs.bool {
             let alert = UIAlertController(title: "Sign Out", message: "Are you sure you want to Sign Out?", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { action in
             
                 let credential = NSURLCredentialStorage.sharedCredentialStorage().credentialsForProtectionSpace(OpenSubtitles.sharedInstance.protectionSpace)!.values.first!
                 NSURLCredentialStorage.sharedCredentialStorage().removeCredential(credential, forProtectionSpace: OpenSubtitles.sharedInstance.protectionSpace)
-                self.ud.setBool(false, forKey: "AuthorizedOpenSubs")
+                
+                Settings.AuthorizedOpenSubs.setBool(false)
+
                 self.updateSignedInStatus(sender, isSignedIn: false)
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
             presentViewController(alert, animated: true, completion: nil)
         } else {
             var alert = UIAlertController(title: "Sign In", message: "VIP account required.", preferredStyle: .Alert)
+            
             alert.addTextFieldWithConfigurationHandler({ (textField) in
                 textField.placeholder = "Username"
             })
+            
             alert.addTextFieldWithConfigurationHandler({ (textField) in
                 textField.placeholder = "Password"
                 textField.secureTextEntry = true
             })
+            
             alert.addAction(UIAlertAction(title: "Sign In", style: .Default, handler: { (action) in
                 let credential = NSURLCredential(user: alert.textFields![0].text!, password: alert.textFields![1].text!, persistence: .Permanent)
                 NSURLCredentialStorage.sharedCredentialStorage().setCredential(credential, forProtectionSpace: OpenSubtitles.sharedInstance.protectionSpace)
                 OpenSubtitles.sharedInstance.login({
-                    self.ud.setBool(true, forKey: "AuthorizedOpenSubs")
+                    Settings.AuthorizedOpenSubs.setBool(true)
+
                     self.updateSignedInStatus(sender, isSignedIn: true)
                     }, error: { error in
                         NSURLCredentialStorage.sharedCredentialStorage().removeCredential(credential, forProtectionSpace: OpenSubtitles.sharedInstance.protectionSpace)
@@ -182,7 +181,7 @@ class SettingsTableViewController: UITableViewController, TablePickerViewDelegat
     }
     
     @IBAction func removeCacheOnPlayerExit(sender: UISwitch) {
-        ud.setBool(sender.on, forKey: "removeCacheOnPlayerExit")
+        Settings.RemoveCacheOnPlayerExit.setBool(sender.on)
     }
     
     @IBAction func showWebsite(sender: AnyObject) {
@@ -206,7 +205,8 @@ class SettingsTableViewController: UITableViewController, TablePickerViewDelegat
                     let credential = try OAuthCredential(URLString: "https://api-v2launch.trakt.tv/oauth/token", code: query["code"]!, redirectURI: "PopcornTime://trakt", clientID: TraktTVAPI.sharedInstance.clientId, clientSecret: TraktTVAPI.sharedInstance.clientSecret, useBasicAuthentication: false)
                     OAuthCredential.storeCredential(credential, identifier: "trakt")
                     asyncMain {
-                        self.ud.setBool(true, forKey: "AuthorizedTrakt")
+                        Settings.AuthorizedTrakt.setBool(true)
+
                         self.updateSignedInStatus(self.traktSignInButton, isSignedIn: true)
                     }
                 } catch {}
